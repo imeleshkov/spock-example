@@ -1,21 +1,32 @@
 package flow.acquisition
 
+import flow.acquisition.forms.DirectDebitForm
 import flow.acquisition.forms.PersonalDetailsForm
+import flow.acquisition.forms.TermsAndConditionsForm
+import flow.acquisition.pages.AcquisitionPaymentDetailsResponseDocument
 import flow.acquisition.pages.AquisitionPayMonthlyPhonesPage
+import flow.acquisition.pages.AcquisitionPaymentDetailsPage
 import flow.acquisition.pages.CartPage
 import flow.acquisition.forms.DeliveryAddressForm
 import flow.acquisition.pages.DeliveryPage
 import flow.acquisition.pages.DirectDebitPage
 import flow.acquisition.pages.HomePage
 import flow.acquisition.pages.PersonalDetailsPage
+import flow.acquisition.pages.TccHostedPage
+import flow.acquisition.pages.TermsAndConditionsPage
+import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
 import flow.common.CheckoutPage
+import flow.common.CleanActionForm
 import flow.common.CommonNavigationComponent
 import flow.common.E2ETestPhone
+import flow.common.E2ETestUser
 import flow.common.EndToEndTest
 import flow.common.Gallery
 import flow.common.GalleryItem
+import flow.common.PaymentDetailsForm
+import flow.common.PaymentFrame
 import flow.common.PhoneDetailsPage
 import flow.common.ServicePlanCarousel
 import org.junit.experimental.categories.Category
@@ -115,16 +126,74 @@ class AcquisitionFlowSpec extends Specification {
         browser.open(CheckoutPage.class, false)
         PersonalDetailsPage page = browser.open(PersonalDetailsPage.class, false)
 
-        then: 'page loads successfully'
-        page != null
+        then: 'page should have correct basket information'
+        def basketTestData = BasketTestData.getBuilder()
+                .title(E2ETestPhone.AcquisitionFlowPhone.TITLE)
+                .phoneCapacity(E2ETestPhone.AcquisitionFlowPhone.CAPACITY)
+                .phoneColour(E2ETestPhone.AcquisitionFlowPhone.COLOUR)
+                .payToday(E2ETestPhone.AcquisitionFlowPhone.ServicePlan.HANDSET_COST)
+                .monthlyCost(E2ETestPhone.AcquisitionFlowPhone.ServicePlan.MONTHLY_COST)
+                .build()
+        page.basket.testData == basketTestData
 
-
-        when: 'user submits personal details form'
+        and: 'form should redirect to direct debit page'
         PersonalDetailsForm personalForm = new PersonalDetailsForm(page.getToken())
-        def newPage = browser.submit(personalForm)
+        browser.submit(personalForm) == DirectDebitPage.class
 
-        then: 'system redirects to direct debit page'
-        newPage == DirectDebitPage.class
+        when: 'user lands on direct debit page'
+        DirectDebitPage debitPage = browser.open(DirectDebitPage.class, false)
+
+        then: 'page should have correct basket information'
+        debitPage.basket.testData == basketTestData
+        DirectDebitForm debitForm = new DirectDebitForm(debitPage.getToken())
+        browser.submit(debitForm) == TermsAndConditionsPage.class
+
+        when: 'user lands on Terms and Conditions page'
+        TermsAndConditionsPage termsPage = browser.open(TermsAndConditionsPage.class, false)
+
+        then: 'page should have correct basket information'
+        termsPage.basket.testData == basketTestData
+        TermsAndConditionsForm termsForm = new TermsAndConditionsForm(termsPage.getToken())
+        browser.submit(termsForm) == TccHostedPage.class
+
+        when: 'Payment page opens'
+        TccHostedPage tccPage = browser.open(TccHostedPage.class, false)
+
+        then: 'hidden initialize page loading'
+        CleanActionForm payloadForm = tccPage.getPayload()
+
+        when: 'hidden initialize page processed successfully'
+        String response = browser.submitMockForRedirect(payloadForm)
+
+        then: 'server redirects to correct page'
+        response.contains("/payment")
+
+        when: 'user finally lands on payment page'
+        AcquisitionPaymentDetailsPage paymentPage = browser.open(AcquisitionPaymentDetailsPage.class, false)
+
+        then: 'page contains correct information'
+        paymentPage.basket.testData == basketTestData
+
+        when: 'iframe loads'
+        PaymentFrame frame = browser.open(PaymentFrame.class, true)
+
+        then: 'iframe loaded correctly'
+        frame.checkPaymentForm()
+
+        when: 'the user submits payment details form'
+        PaymentDetailsForm form = PaymentDetailsForm.getBuilder()
+                .cardSecurityCode(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.SECURITY_CODE)
+                .creditCardNumber(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_NUMBER)
+                .creditCardType(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_TYPE)
+                .csrfToken(frame.getToken().getValue())
+                .expirationMonth(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_EXPIRE_MONTH)
+                .expirationYear(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_EXPIRE_YEAR)
+                .nameOnCard(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.NAME_ON_CARD)
+                .build()
+        AcquisitionPaymentDetailsResponseDocument cardDetailsResponse = browser.submitMockForDocument(AcquisitionPaymentDetailsResponseDocument.class, form)
+
+        then: 'response contains success form'
+        cardDetailsResponse.checkFormAction()
 
     }
 

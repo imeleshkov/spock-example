@@ -1,5 +1,8 @@
 package flow.common
 
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
+
 import static groovyx.net.http.ContentTypes.JSON
 import groovy.text.SimpleTemplateEngine
 import groovyx.net.http.ApacheHttpBuilder
@@ -15,6 +18,8 @@ import static SslUtils2.ignoreSslIssues
  * Browses page by use {@link HttpBuilder}
  */
 class Browser {
+
+    private static final Logger log = LoggerFactory.getLogger(Browser.class)
 
     private static final pathsMap = new PagesPathsMap().pathsMap
 
@@ -100,11 +105,6 @@ class Browser {
             request.uri = uri
             request.uri.path = path
             request.body = form
-            Map<String, CharSequence> headers = new HashMap<>(request.getHeaders())
-            headers.put('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-            headers.put('Upgrade-Insecure-Requests', '1')
-            headers.put('Referer', 'https://ee.local:9002/checkout/multi/personal-details')
-            request.setHeaders(headers)
             request.contentType = 'application/x-www-form-urlencoded'
             request.encoder 'application/x-www-form-urlencoded', NativeHandlers.Encoders.&form
             response.success successHandler
