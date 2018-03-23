@@ -1,4 +1,4 @@
-package flow.addline
+package flow.addline.pages
 
 import flow.common.InitializePage
 import org.jsoup.nodes.Document

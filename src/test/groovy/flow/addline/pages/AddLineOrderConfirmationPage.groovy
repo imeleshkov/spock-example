@@ -1,4 +1,4 @@
-package flow.addline
+package flow.addline.pages
 
 import flow.common.OrderConfirmationPage
 import org.jsoup.nodes.Document

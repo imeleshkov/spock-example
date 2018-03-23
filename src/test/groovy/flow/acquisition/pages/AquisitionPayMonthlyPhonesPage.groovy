@@ -1,4 +1,4 @@
-package flow.acquisition
+package flow.acquisition.pages
 
 import flow.common.PageWithPhoneGallery
 import org.jsoup.nodes.Document

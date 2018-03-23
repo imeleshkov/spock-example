@@ -1,16 +1,25 @@
 package flow.addline
 
+import flow.addline.pages.AddLineCheckoutPage
+import flow.addline.pages.AddLineExtrasPage
+import flow.addline.pages.AddLineInitPage
+import flow.addline.pages.AddLineOrderConfirmationPage
+import flow.addline.pages.AddLinePayMonthlyPhonesPage
+import flow.addline.pages.AddLinePaymentPage
+import flow.addline.pages.AddLinePersonalizedHomePage
+import flow.addline.pages.AddLineWebSecurePage
 import flow.common.AddonItem
 import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
+import flow.common.CleanActionForm
 import flow.common.CommonNavigationComponent
 import flow.common.E2ETestPhone
 import flow.common.E2ETestUser
 import flow.common.EndToEndTest
 import flow.common.Gallery
 import flow.common.GalleryItem
-import flow.common.InitializeForm
+
 import flow.common.PaymentDetailsForm
 import flow.common.PaymentDetailsResponseDocument
 import flow.common.PaymentFrame
@@ -152,7 +161,7 @@ class AddLineFlowSpec extends Specification{
         AddLineInitPage page = browser.open(AddLineInitPage.class, false)
 
         then: 'hidden initialize page loading'
-        InitializeForm payloadForm = page.getPayload()
+        CleanActionForm payloadForm = page.getPayload()
 
         when: 'hidden initialize page processed successfully'
         String response = browser.submitMockForRedirect(payloadForm)

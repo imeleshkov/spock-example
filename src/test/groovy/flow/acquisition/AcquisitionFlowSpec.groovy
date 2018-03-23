@@ -1,7 +1,16 @@
 package flow.acquisition
 
+import flow.acquisition.forms.PersonalDetailsForm
+import flow.acquisition.pages.AquisitionPayMonthlyPhonesPage
+import flow.acquisition.pages.CartPage
+import flow.acquisition.forms.DeliveryAddressForm
+import flow.acquisition.pages.DeliveryPage
+import flow.acquisition.pages.DirectDebitPage
+import flow.acquisition.pages.HomePage
+import flow.acquisition.pages.PersonalDetailsPage
 import flow.common.Browser
 import flow.common.CarouselItem
+import flow.common.CheckoutPage
 import flow.common.CommonNavigationComponent
 import flow.common.E2ETestPhone
 import flow.common.EndToEndTest
@@ -90,13 +99,34 @@ class AcquisitionFlowSpec extends Specification {
     def 'then user choose delivery option'() {
         when: 'A user goes to Delivery page'
         DeliveryPage page = browser.open(DeliveryPage.class, false)
-        /*Document result = browser.getHttpBuilder().get {
-            request.uri = 'https://ee.local:9002/delivery'
-        }*/
-        //println page
 
         then: 'cart page should have correct total values'
-        true
+        def cartTotal = page.getCartTotal()
+        cartTotal.payToday == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.HANDSET_COST
+        cartTotal.payMonthly == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.MONTHLY_COST
+
+        and: 'user fills in delivery form with data and submit'
+        DeliveryAddressForm deliveryForm = new DeliveryAddressForm(page.getToken())
+        browser.submit(deliveryForm) == CheckoutPage.class
     }
+
+    def 'User lands on multistep checkout page'() {
+        when: 'personal details page opens'
+        browser.open(CheckoutPage.class, false)
+        PersonalDetailsPage page = browser.open(PersonalDetailsPage.class, false)
+
+        then: 'page loads successfully'
+        page != null
+
+
+        when: 'user submits personal details form'
+        PersonalDetailsForm personalForm = new PersonalDetailsForm(page.getToken())
+        def newPage = browser.submit(personalForm)
+
+        then: 'system redirects to direct debit page'
+        newPage == DirectDebitPage.class
+
+    }
+
 
 }

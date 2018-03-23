@@ -1,4 +1,4 @@
-package flow.addline
+package flow.addline.pages
 
 import flow.common.CommonNavigationComponent
 import flow.common.Page

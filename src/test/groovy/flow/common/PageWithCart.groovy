@@ -1,14 +1,15 @@
-package flow.acquisition
+package flow.common
 
-import flow.common.Page
 import org.jsoup.nodes.Document
 
 /**
- * This page object represents the cart page.
+ * This object represents common functionality of pages with cart section
  */
-class CartPage extends Page {
+class PageWithCart extends Page {
 
-    private CartPage(Document page) {
+
+
+    PageWithCart(Document page) {
         super(page)
     }
 

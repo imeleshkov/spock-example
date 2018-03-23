@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 /**
  * This object represents payment form which is filled with user data
  */
-class PaymentDetailsForm  implements IForm {
+class PaymentDetailsForm implements IForm {
 
     private String cardSecurityCode
     private String Continue = 'Continue'

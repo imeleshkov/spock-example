@@ -5,12 +5,13 @@ import flow.common.AddonItem
 import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
+import flow.common.CleanActionForm
 import flow.common.E2ETestPhone
 import flow.common.E2ETestUser
 import flow.common.EndToEndTest
 import flow.common.Gallery
 import flow.common.GalleryItem
-import flow.common.InitializeForm
+
 import flow.common.PaymentDetailsForm
 import flow.common.PaymentDetailsResponseDocument
 import flow.common.PaymentFrame
@@ -19,6 +20,14 @@ import flow.common.ServicePlanCarousel
 import flow.common.ThreeDSBreakoutPage
 import flow.common.WebSecurePageFrame
 import flow.common.WebSecurePageSubmitFrame
+import flow.upgrade.pages.UpgradeAccessoriesPage
+import flow.upgrade.pages.UpgradeCheckoutPage
+import flow.upgrade.pages.UpgradeExtrasPage
+import flow.upgrade.pages.UpgradeInitPage
+import flow.upgrade.pages.UpgradeOrderConfirmationPage
+import flow.upgrade.pages.UpgradePayMonthlyPhonesPage
+import flow.upgrade.pages.UpgradePaymentPage
+import flow.upgrade.pages.UpgradeWebSecurePage
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
 import spock.lang.Specification
@@ -172,7 +181,7 @@ class UpgradeWithoutRecommendationsFlowSpec extends Specification {
         UpgradeInitPage page = browser.open(UpgradeInitPage.class, false)
 
         then: 'hidden initialize page loading'
-        InitializeForm payloadForm = page.getPayload()
+        CleanActionForm payloadForm = page.getPayload()
 
         when: 'hidden initialize page processed successfully'
         String response = browser.submitMockForRedirect(payloadForm)

@@ -1,4 +1,4 @@
-package flow.upgrade
+package flow.upgrade.pages
 
 import flow.common.PaymentPage
 import org.jsoup.nodes.Document

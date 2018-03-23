@@ -1,4 +1,4 @@
-package flow.upgrade
+package flow.upgrade.pages
 
 import flow.common.InitializePage
 import org.jsoup.nodes.Document

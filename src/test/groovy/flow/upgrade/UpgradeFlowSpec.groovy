@@ -1,7 +1,8 @@
 package flow.upgrade
 
 import flow.common.CarouselItem
-import flow.common.InitializeForm
+import flow.common.CleanActionForm
+
 import flow.common.PaymentDetailsForm
 import flow.common.PaymentDetailsResponseDocument
 import flow.common.PaymentFrame
@@ -16,6 +17,14 @@ import flow.common.EndToEndTest
 import flow.common.ThreeDSBreakoutPage
 import flow.common.WebSecurePageFrame
 import flow.common.WebSecurePageSubmitFrame
+import flow.upgrade.pages.RecommendationsPage
+import flow.upgrade.pages.UpgradeCheckoutPage
+import flow.upgrade.pages.UpgradeExtrasPage
+import flow.upgrade.pages.UpgradeInitPage
+import flow.upgrade.pages.UpgradeOrderConfirmationPage
+import flow.upgrade.pages.UpgradePaymentPage
+import flow.upgrade.pages.UpgradePersonalizedHomePage
+import flow.upgrade.pages.UpgradeWebSecurePage
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
 import spock.lang.Specification
@@ -132,7 +141,7 @@ class UpgradeFlowSpec extends Specification {
         UpgradeInitPage page = browser.open(UpgradeInitPage.class, false)
 
         then: 'hidden initialize page loading'
-        InitializeForm payloadForm = page.getPayload()
+        CleanActionForm payloadForm = page.getPayload()
 
         when: 'hidden initialize page processed successfully'
         String response = browser.submitMockForRedirect(payloadForm)

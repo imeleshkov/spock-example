@@ -1,4 +1,4 @@
-package flow.addline
+package flow.addline.pages
 
 import flow.common.CheckoutPage
 import org.jsoup.nodes.Document

@@ -16,7 +16,7 @@ import static SslUtils2.ignoreSslIssues
  */
 class Browser {
 
-    private static final pathsMap = PagesPathsMap.pathsMap
+    private static final pathsMap = new PagesPathsMap().pathsMap
 
     private static final String BASE_URL_SECURE = 'https://ee.local:9002'
     private static final String BASE_URL_TCC = 'http://127.0.0.1:8080'
@@ -100,9 +100,17 @@ class Browser {
             request.uri = uri
             request.uri.path = path
             request.body = form
+            Map<String, CharSequence> headers = new HashMap<>(request.getHeaders())
+            headers.put('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+            headers.put('Upgrade-Insecure-Requests', '1')
+            headers.put('Referer', 'https://ee.local:9002/checkout/multi/personal-details')
+            request.setHeaders(headers)
             request.contentType = 'application/x-www-form-urlencoded'
             request.encoder 'application/x-www-form-urlencoded', NativeHandlers.Encoders.&form
             response.success successHandler
+            response.failure { FromServer fs, Object body ->
+                throw new RuntimeException("Couldn't reach [${fs.getUri()}]. Received [${fs.getStatusCode()}] status.")
+            }
         }
     }
 

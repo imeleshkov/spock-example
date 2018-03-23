@@ -14,8 +14,8 @@ class InitializePage extends Page {
         super(page)
     }
 
-    InitializeForm getPayload() {
+    CleanActionForm getPayload() {
         def payloadForm = find(PAYLOAD_FORM_SELECTOR)
-        return new InitializeForm(payloadForm as FormElement)
+        return new CleanActionForm(payloadForm as FormElement)
     }
 }

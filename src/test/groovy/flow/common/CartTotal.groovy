@@ -1,4 +1,4 @@
-package flow.acquisition
+package flow.common
 
 import flow.common.ElementWrapper
 import flow.common.Money

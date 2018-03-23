@@ -1,4 +1,4 @@
-package flow.upgrade
+package flow.upgrade.pages
 
 import flow.common.WebSecurePage
 import org.jsoup.nodes.Document
