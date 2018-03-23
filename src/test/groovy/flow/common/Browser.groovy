@@ -247,4 +247,25 @@ class Browser {
             }
         }
     }
+
+    def <T> T submitHybrisWithQuery(Class<T> documentClass, IForm form, Map query) {
+        Document response = httpBuilder.post {
+            request.uri = BASE_URL_SECURE
+            request.uri.path = form.getAction()
+            request.body = form.getFormData()
+            request.uri.query = query
+            request.contentType = 'application/x-www-form-urlencoded'
+            request.encoder 'application/x-www-form-urlencoded', NativeHandlers.Encoders.&form
+            response.success { FromServer fs, Object body ->
+                if (fs.getStatusCode() != 200) {
+                    throw new RuntimeException("Received [${fs.getStatusCode()}] status code instead of 200 in response of [${fs.getUri()}]")
+                }
+                return body
+            }
+            response.failure { FromServer fs, Object body ->
+                throw new RuntimeException("Couldn't reach [${fs.getUri()}]. Received [${fs.getStatusCode()}] status.")
+            }
+        } as Document
+        return documentClass.newInstance(response)
+    }
 }

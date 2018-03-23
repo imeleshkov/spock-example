@@ -16,6 +16,7 @@ class E2ETestPhone {
         static final Money UPFRONT_COST = MoneyBuilder.fromGBP().value(19.99).build()
 
         static class ServicePlan {
+            static final String PLAN_NAME = '3G 350 minutes Unlimited text messages 500 MB data 24 months plan'
             static final String DATA = '500MB'
             static final Money MONTHLY_COST = MoneyBuilder.fromGBP().value(35.0).build()
             static final Money HANDSET_COST = MoneyBuilder.fromGBP().value(269.99).build()

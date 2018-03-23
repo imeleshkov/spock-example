@@ -14,15 +14,15 @@ class DeliveryAddressForm implements IForm {
     DeliveryAddressForm(CSRFToken token) {
         this.data = [
                 'CSRFToken'                  : token.value,
-                'deliveryAddress.apartment'  : 'Unit+1-4',
-                'deliveryAddress.building'   : 'Trident+Place',
-                'deliveryAddress.companyname': 'E+E+Ltd',
+                'deliveryAddress.apartment'  : 'Unit 1-4',
+                'deliveryAddress.building'   : 'Trident Place',
+                'deliveryAddress.companyname': 'E E Ltd',
                 'deliveryAddress.county'     : 'Hertfordshire',
-                'deliveryAddress.line1'      : 'Mosquito+Way',
-                'deliveryAddress.postalCode' : 'AL10+9BW',
+                'deliveryAddress.line1'      : 'Mosquito Way',
+                'deliveryAddress.postalCode' : 'AL10 9BW',
                 'deliveryAddress.town'       : 'HATFIELD',
                 'deliveryAddressOption'      : false,
-                'deliveryAddressPostCode'    : 'A10+9BW'
+                'deliveryAddressPostCode'    : 'AL10 9BW'
         ]
     }
 

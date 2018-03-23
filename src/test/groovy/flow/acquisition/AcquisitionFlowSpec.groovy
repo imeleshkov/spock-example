@@ -1,9 +1,14 @@
 package flow.acquisition
 
 import flow.acquisition.forms.DirectDebitForm
+import flow.acquisition.forms.IdentityCheckForm
+import flow.acquisition.forms.IdentityContinueForm
 import flow.acquisition.forms.PersonalDetailsForm
 import flow.acquisition.forms.TermsAndConditionsForm
+import flow.acquisition.pages.AcquisitionOrderConfirmationPage
 import flow.acquisition.pages.AcquisitionPaymentDetailsResponseDocument
+import flow.acquisition.pages.AcquisitionSecurePageFrame
+import flow.acquisition.pages.AcquisitionThreeDSBreakoutPage
 import flow.acquisition.pages.AquisitionPayMonthlyPhonesPage
 import flow.acquisition.pages.AcquisitionPaymentDetailsPage
 import flow.acquisition.pages.CartPage
@@ -11,9 +16,12 @@ import flow.acquisition.forms.DeliveryAddressForm
 import flow.acquisition.pages.DeliveryPage
 import flow.acquisition.pages.DirectDebitPage
 import flow.acquisition.pages.HomePage
+import flow.acquisition.pages.IdentityCheckPage
+import flow.acquisition.pages.IdentitySubmitDocument
 import flow.acquisition.pages.PersonalDetailsPage
 import flow.acquisition.pages.TccHostedPage
 import flow.acquisition.pages.TermsAndConditionsPage
+import flow.acquisition.pages.ThreeDSHostingPage
 import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
@@ -29,6 +37,7 @@ import flow.common.PaymentDetailsForm
 import flow.common.PaymentFrame
 import flow.common.PhoneDetailsPage
 import flow.common.ServicePlanCarousel
+import flow.common.WebSecurePageSubmitFrame
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
 import spock.lang.Specification
@@ -42,6 +51,15 @@ class AcquisitionFlowSpec extends Specification {
 
     @Shared
     Browser browser = new Browser()
+
+    @Shared
+    def basketTestData = BasketTestData.getBuilder()
+            .title(E2ETestPhone.AcquisitionFlowPhone.TITLE)
+            .phoneCapacity(E2ETestPhone.AcquisitionFlowPhone.CAPACITY)
+            .phoneColour(E2ETestPhone.AcquisitionFlowPhone.COLOUR)
+            .payToday(E2ETestPhone.AcquisitionFlowPhone.ServicePlan.HANDSET_COST)
+            .monthlyCost(E2ETestPhone.AcquisitionFlowPhone.ServicePlan.MONTHLY_COST)
+            .build()
 
     def 'An anonymous user starts at Home page'() {
 
@@ -127,19 +145,14 @@ class AcquisitionFlowSpec extends Specification {
         PersonalDetailsPage page = browser.open(PersonalDetailsPage.class, false)
 
         then: 'page should have correct basket information'
-        def basketTestData = BasketTestData.getBuilder()
-                .title(E2ETestPhone.AcquisitionFlowPhone.TITLE)
-                .phoneCapacity(E2ETestPhone.AcquisitionFlowPhone.CAPACITY)
-                .phoneColour(E2ETestPhone.AcquisitionFlowPhone.COLOUR)
-                .payToday(E2ETestPhone.AcquisitionFlowPhone.ServicePlan.HANDSET_COST)
-                .monthlyCost(E2ETestPhone.AcquisitionFlowPhone.ServicePlan.MONTHLY_COST)
-                .build()
         page.basket.testData == basketTestData
 
         and: 'form should redirect to direct debit page'
         PersonalDetailsForm personalForm = new PersonalDetailsForm(page.getToken())
         browser.submit(personalForm) == DirectDebitPage.class
+    }
 
+    def 'user goes to direct debit page'() {
         when: 'user lands on direct debit page'
         DirectDebitPage debitPage = browser.open(DirectDebitPage.class, false)
 
@@ -147,7 +160,9 @@ class AcquisitionFlowSpec extends Specification {
         debitPage.basket.testData == basketTestData
         DirectDebitForm debitForm = new DirectDebitForm(debitPage.getToken())
         browser.submit(debitForm) == TermsAndConditionsPage.class
+    }
 
+    def 'user goes to terms and conditions page'() {
         when: 'user lands on Terms and Conditions page'
         TermsAndConditionsPage termsPage = browser.open(TermsAndConditionsPage.class, false)
 
@@ -155,11 +170,13 @@ class AcquisitionFlowSpec extends Specification {
         termsPage.basket.testData == basketTestData
         TermsAndConditionsForm termsForm = new TermsAndConditionsForm(termsPage.getToken())
         browser.submit(termsForm) == TccHostedPage.class
+    }
 
-        when: 'Payment page opens'
+    def 'user submits terms and conditions and starts processing'() {
+        when: 'hidden initialize page loading'
         TccHostedPage tccPage = browser.open(TccHostedPage.class, false)
 
-        then: 'hidden initialize page loading'
+        then: 'hidden initialize contains payload'
         CleanActionForm payloadForm = tccPage.getPayload()
 
         when: 'hidden initialize page processed successfully'
@@ -167,7 +184,9 @@ class AcquisitionFlowSpec extends Specification {
 
         then: 'server redirects to correct page'
         response.contains("/payment")
+    }
 
+    def 'user goes to payment page'() {
         when: 'user finally lands on payment page'
         AcquisitionPaymentDetailsPage paymentPage = browser.open(AcquisitionPaymentDetailsPage.class, false)
 
@@ -180,7 +199,7 @@ class AcquisitionFlowSpec extends Specification {
         then: 'iframe loaded correctly'
         frame.checkPaymentForm()
 
-        when: 'the user submits payment details form'
+        when: 'user submits payment details form'
         PaymentDetailsForm form = PaymentDetailsForm.getBuilder()
                 .cardSecurityCode(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.SECURITY_CODE)
                 .creditCardNumber(E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_NUMBER)
@@ -192,10 +211,72 @@ class AcquisitionFlowSpec extends Specification {
                 .build()
         AcquisitionPaymentDetailsResponseDocument cardDetailsResponse = browser.submitMockForDocument(AcquisitionPaymentDetailsResponseDocument.class, form)
 
-        then: 'response contains success form'
+        then: 'response contains success form and redirects to identity check page'
         cardDetailsResponse.checkFormAction()
-
+        browser.submit(cardDetailsResponse.getForm()) == IdentityCheckPage.class
     }
 
+    def 'user goes to identity check page'() {
+        when: 'user lands on identity check page'
+        IdentityCheckPage identityCheckPage = browser.open(IdentityCheckPage.class, false)
+
+        then: 'page contains correct information'
+        identityCheckPage.basket.testData == basketTestData
+        IdentityContinueForm continueForm = new IdentityContinueForm(identityCheckPage.getToken())
+        IdentitySubmitDocument responseDocument = browser.submitHybrisWithQuery(IdentitySubmitDocument.class, continueForm, ['consent': 'true'])
+        IdentityCheckForm identityCheckForm = new IdentityCheckForm(responseDocument.getToken(), responseDocument.getTransactionKey(), responseDocument.interactiveId)
+        Object responseJson = responseDocument.submitForm(browser, identityCheckForm)
+        responseJson.success == 'true'
+    }
+
+    def 'user goes to secure payment page'() {
+        when: 'secure page loads'
+        browser.open(ThreeDSHostingPage.class, false)
+        AcquisitionSecurePageFrame securePageFrame = browser.open(AcquisitionSecurePageFrame.class, false)
+
+        then: 'frame loads successfully'
+        securePageFrame.checkDataNotDull()
+
+        when: 'frame does intermediate form submit'
+        WebSecurePageSubmitFrame submitFrame = browser.submitMockForDocument(WebSecurePageSubmitFrame.class, securePageFrame.getForm())
+
+        then: 'user sees request for submitting'
+        submitFrame.checkForm()
+
+        when: 'user submits processing'
+        AcquisitionThreeDSBreakoutPage breakoutPage = browser.submitHybrisForDocument(AcquisitionThreeDSBreakoutPage.class, submitFrame.getForm())
+
+        then: 'breakout form leads to confirmation page'
+        breakoutPage.checkForm()
+
+        when: 'page loads'
+        AcquisitionOrderConfirmationPage confirmationPage = browser.open(AcquisitionOrderConfirmationPage.class, false,
+                [
+                        orderId: breakoutPage.getOrderId()
+                ])
+
+        then: 'page should contain correct personal information'
+        confirmationPage.getUserName() == E2ETestUser.AcquisitionFlowUser.NAME
+        confirmationPage.getUserBillingAddress() == E2ETestUser.AcquisitionFlowUser.BILLING_ADDRESS
+        confirmationPage.getUserDeliveryAddress() == E2ETestUser.AcquisitionFlowUser.BILLING_ADDRESS
+        confirmationPage.getUserPhone() == E2ETestUser.AcquisitionFlowUser.PHONE
+        confirmationPage.getUserAccountName() == E2ETestUser.AcquisitionFlowUser.HOLDER
+        confirmationPage.getPaymentMethod() == E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.PAYMENT_METHOD
+        confirmationPage.getAccountNumberEnding() == E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_ACCOUNT_NUMBER.substring(4)
+        confirmationPage.getCardType() == E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_TYPE_FULL
+        confirmationPage.getCardExpiryDate() == E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_EXPIRE_MONTH.substring(1) + '/' +
+                E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_EXPIRE_YEAR
+        confirmationPage.getCardNumEnding() == E2ETestUser.AcquisitionFlowUser.AcquisitionCreditCard.CARD_NUMBER.substring(12)
+
+        and: 'and correct order information'
+        confirmationPage.getPhoneTitle() == E2ETestPhone.AcquisitionFlowPhone.TITLE
+        confirmationPage.getNewPlan() == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.PLAN_NAME
+        confirmationPage.getPayToday() == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.HANDSET_COST
+        confirmationPage.getMonthlyCost() == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.MONTHLY_COST
+    }
+
+    def 'then user lands on Order confirmation page'() {
+
+    }
 
 }

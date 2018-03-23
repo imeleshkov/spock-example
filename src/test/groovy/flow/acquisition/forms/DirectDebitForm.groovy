@@ -14,8 +14,8 @@ class DirectDebitForm implements IForm {
     DirectDebitForm(CSRFToken token) {
         this.data = [
                 'CSRFToken'    : token.value,
-                'accountName'  : 'TestUser',
-                'accountNumber': '12121212',
+                'accountName'  : 'John Black',
+                'accountNumber': '44444444',
                 'paymentMethod': 'DIRECT_DEBIT',
                 'sortCode1'    : '12',
                 'sortCode2'    : '12',

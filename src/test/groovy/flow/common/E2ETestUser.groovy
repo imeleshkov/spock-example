@@ -34,9 +34,9 @@ class E2ETestUser {
         static final String HOLDER = 'John Black'
         static final String EMAIL = 'eeupgrade@yahoo.com'
         static final String PASSWORD = ' '
-        static final String PHONE = '07873 555001'
+        static final String PHONE = '07123123123'
         static final String ADDRESS = 'E E Ltd, Unit 1-4 Trident Place, Mosquito Way, HATFIELD, Hertfordshire, AL10 9BW'
-        static final String BILLING_ADDRESS = 'E E Ltd, Unit 1-4 Trident Place, Mosquito Way, HATFIELD, Hertfordshire, AL10 9BW'
+        static final String BILLING_ADDRESS = 'Unit 1-4 Trident Place Mosquito Way HATFIELD Hertfordshire AL10 9BW'
         static final String USER_ACCAUNT_NUMBER = '12121212'
         static final String MSISDN_NUMBER = '11111111111111'
 
