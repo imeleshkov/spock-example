@@ -1,7 +1,6 @@
 package flow.acquisition.pages
 
 import flow.common.Basket
-import flow.common.BasketTestData
 import flow.common.Money
 import flow.common.MoneyBuilder
 import org.jsoup.nodes.Element
@@ -23,14 +22,16 @@ class AcquisitionBasket extends Basket {
      * Returns the title portion of the name of shown phone.
      * @return
      */
+    @Override
     String getPhoneTitle() {
-        return element.select(PRODUCT_TITLE_SELECTOR).first().text()
+        return find(PRODUCT_TITLE_SELECTOR).text()
     }
 
     /**
      * Returns the capacity portion of the name of shown phone.
      * @return
      */
+    @Override
     String getPhoneCapacity() {
         return element.select(PRODUCT_PROPERTY_SELECTOR).first().text()
     }
@@ -39,6 +40,7 @@ class AcquisitionBasket extends Basket {
      * Returns the colour portion of the name of shown phone.
      * @return
      */
+    @Override
     String getPhoneColour() {
         return element.select(PRODUCT_PROPERTY_SELECTOR).get(1).text()
     }
@@ -47,6 +49,7 @@ class AcquisitionBasket extends Basket {
      * Returns pay today total value from basket section
      * @return
      */
+    @Override
     Money getPayToday() {
         Element priceElem = element.select(TOTAL_COST_SELECTOR).first()
         return MoneyBuilder.fromElement(priceElem).build()
@@ -56,18 +59,9 @@ class AcquisitionBasket extends Basket {
      * Returns monthly cost total value from basket section
      * @return
      */
+    @Override
     Money getMonthlyCost() {
         Element priceElem = element.select(TOTAL_COST_SELECTOR).get(1)
         return MoneyBuilder.fromElement(priceElem).build()
-    }
-
-    BasketTestData getTestData() {
-        return BasketTestData.getBuilder()
-                .title(getPhoneTitle())
-                .phoneCapacity(getPhoneCapacity())
-                .phoneColour(getPhoneColour())
-                .payToday(getPayToday())
-                .monthlyCost(getMonthlyCost())
-                .build()
     }
 }

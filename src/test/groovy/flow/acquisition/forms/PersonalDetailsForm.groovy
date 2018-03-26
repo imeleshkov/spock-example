@@ -1,6 +1,7 @@
 package flow.acquisition.forms
 
 import flow.common.CSRFToken
+import flow.common.E2ETestUser
 import flow.common.IForm
 
 /**
@@ -16,32 +17,32 @@ class PersonalDetailsForm implements IForm {
                 'CSRFToken'                 : token.value,
                 '_alternateDelivery'        : 'on',
                 '_keepMyNumber'             : 'on',
-                'alternateDelivery'         : 'true',
-                'currentAddress.apartment'  : 'Unit 1-4',
-                'currentAddress.building'   : 'Trident Place',
-                'currentAddress.companyName': 'E E Ltd',
-                'currentAddress.county'     : 'Hertfordshire',
-                'currentAddress.line1'      : 'Mosquito Way',
-                'currentAddress.postalCode' : 'AL10 9BW',
-                'currentAddress.town'       : 'HATFIELD',
-                'currentAddressMonth'       : '4',
-                'currentAddressPostCode'    : 'AL10 9BW',
-                'currentAddressYear'        : '2010',
-                'dobDD'                     : '12',
-                'dobMM'                     : '11',
-                'dobYYYY'                   : '1991',
-                'email'                     : 'asd@asd.com',
+                'alternateDelivery'         : true,
+                'currentAddress.apartment'  : E2ETestUser.AcquisitionFlowUser.APARTMENT,
+                'currentAddress.building'   : E2ETestUser.AcquisitionFlowUser.BUILDING,
+                'currentAddress.companyName': E2ETestUser.AcquisitionFlowUser.COMPANY_NAME,
+                'currentAddress.county'     : E2ETestUser.AcquisitionFlowUser.COUNTY,
+                'currentAddress.line1'      : E2ETestUser.AcquisitionFlowUser.ADDRESS_LINE_ONE,
+                'currentAddress.postalCode' : E2ETestUser.AcquisitionFlowUser.POST_CODE,
+                'currentAddress.town'       : E2ETestUser.AcquisitionFlowUser.TOWN,
+                'currentAddressMonth'       : E2ETestUser.AcquisitionFlowUser.EMPLOYMENT_MONTH,
+                'currentAddressPostCode'    : E2ETestUser.AcquisitionFlowUser.POST_CODE,
+                'currentAddressYear'        : E2ETestUser.AcquisitionFlowUser.EMPLOYMENT_YEAR,
+                'dobDD'                     : E2ETestUser.AcquisitionFlowUser.DAY_OF_BIRTH,
+                'dobMM'                     : E2ETestUser.AcquisitionFlowUser.MONTH_OF_BIRTH,
+                'dobYYYY'                   : E2ETestUser.AcquisitionFlowUser.YEAR_OF_BIRTH,
+                'email'                     : E2ETestUser.AcquisitionFlowUser.EMAIL,
                 'employmentType'            : 'officeBased',
-                'firstName'                 : 'John',
-                'lastName'                  : 'Black',
-                'mobileNumber'              : '07123123123',
-                'overseasAddress'           : 'false',
+                'firstName'                 : E2ETestUser.AcquisitionFlowUser.NAME.split(' ')[0],
+                'lastName'                  : E2ETestUser.AcquisitionFlowUser.NAME.split(' ')[1],
+                'mobileNumber'              : E2ETestUser.AcquisitionFlowUser.PHONE,
+                'overseasAddress'           : false,
                 'overseasCountry'           : 'unselected',
                 'residentialStatus'         : 'livesWithParents',
-                'startMonthOfBank'          : '5',
-                'startMonthOfEmployment'    : '5',
-                'startYearOfBank'           : '2014',
-                'startYearOfEmployment'     : '2014',
+                'startMonthOfBank'          : E2ETestUser.AcquisitionFlowUser.EMPLOYMENT_MONTH,
+                'startMonthOfEmployment'    : E2ETestUser.AcquisitionFlowUser.EMPLOYMENT_MONTH,
+                'startYearOfBank'           : E2ETestUser.AcquisitionFlowUser.EMPLOYMENT_YEAR,
+                'startYearOfEmployment'     : E2ETestUser.AcquisitionFlowUser.EMPLOYMENT_YEAR,
                 'titleCode'                 : 'mr'
         ]
     }

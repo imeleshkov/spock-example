@@ -9,6 +9,7 @@ import flow.addline.pages.AddLinePaymentPage
 import flow.addline.pages.AddLinePersonalizedHomePage
 import flow.addline.pages.AddLineWebSecurePage
 import flow.common.AddonItem
+import flow.common.BaseTest
 import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
@@ -30,13 +31,12 @@ import flow.common.WebSecurePageFrame
 import flow.common.WebSecurePageSubmitFrame
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
-import spock.lang.Specification
 
 /**
  * Multi step test which covers "Add Line" scenario
  */
 @Category(EndToEndTest.class)
-class AddLineFlowSpec extends Specification{
+class AddLineFlowSpec extends BaseTest {
 
     @Shared
     Browser browser = new Browser()

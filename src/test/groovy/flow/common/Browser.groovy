@@ -1,8 +1,5 @@
 package flow.common
 
-import org.slf4j.LoggerFactory
-import org.slf4j.Logger
-
 import static groovyx.net.http.ContentTypes.JSON
 import groovy.text.SimpleTemplateEngine
 import groovyx.net.http.ApacheHttpBuilder
@@ -18,8 +15,6 @@ import static SslUtils2.ignoreSslIssues
  * Browses page by use {@link HttpBuilder}
  */
 class Browser {
-
-    private static final Logger log = LoggerFactory.getLogger(Browser.class)
 
     private static final pathsMap = new PagesPathsMap().pathsMap
 

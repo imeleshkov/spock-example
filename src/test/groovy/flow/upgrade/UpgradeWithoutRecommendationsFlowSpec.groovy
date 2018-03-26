@@ -2,6 +2,7 @@ package flow.upgrade
 
 import flow.common.AccessoryItem
 import flow.common.AddonItem
+import flow.common.BaseTest
 import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
@@ -30,13 +31,12 @@ import flow.upgrade.pages.UpgradePaymentPage
 import flow.upgrade.pages.UpgradeWebSecurePage
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
-import spock.lang.Specification
 
 /**
  * Multi step test which covers "Upgrade" scenario through upgrade gallery page
  */
 @Category(EndToEndTest.class)
-class UpgradeWithoutRecommendationsFlowSpec extends Specification {
+class UpgradeWithoutRecommendationsFlowSpec extends BaseTest {
     @Shared
     Browser browser = new Browser()
 

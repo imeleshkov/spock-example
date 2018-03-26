@@ -33,12 +33,20 @@ class E2ETestUser {
         static final String NAME = 'John Black'
         static final String HOLDER = 'John Black'
         static final String EMAIL = 'eeupgrade@yahoo.com'
-        static final String PASSWORD = ' '
         static final String PHONE = '07123123123'
-        static final String ADDRESS = 'E E Ltd, Unit 1-4 Trident Place, Mosquito Way, HATFIELD, Hertfordshire, AL10 9BW'
         static final String BILLING_ADDRESS = 'Unit 1-4 Trident Place Mosquito Way HATFIELD Hertfordshire AL10 9BW'
-        static final String USER_ACCAUNT_NUMBER = '12121212'
-        static final String MSISDN_NUMBER = '11111111111111'
+        static final String APARTMENT = 'Unit 1-4'
+        static final String BUILDING = 'Trident Place'
+        static final String COMPANY_NAME = 'E E Ltd'
+        static final String COUNTY = 'Hertfordshire'
+        static final String ADDRESS_LINE_ONE = 'Mosquito Way'
+        static final String TOWN = 'HATFIELD'
+        static final String POST_CODE = 'AL10 9BW'
+        static final String DAY_OF_BIRTH = '15'
+        static final String MONTH_OF_BIRTH = '11'
+        static final String YEAR_OF_BIRTH = '1991'
+        static final String EMPLOYMENT_MONTH = '5'
+        static final String EMPLOYMENT_YEAR = '2010'
 
         static class AcquisitionCreditCard {
             static final String PAYMENT_METHOD = 'direct debit'
@@ -49,7 +57,7 @@ class E2ETestUser {
             static final String CARD_EXPIRE_MONTH = '06'
             static final String CARD_EXPIRE_YEAR = '2019'
             static final String SECURITY_CODE =  '111'
-            static final String CARD_ACCOUNT_NUMBER = '****4444'
+            static final String CARD_ACCOUNT_NUMBER = '44444444'
             static final String SORT_CODE = '121212'
         }
     }

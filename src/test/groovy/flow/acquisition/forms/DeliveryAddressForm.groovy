@@ -1,6 +1,7 @@
 package flow.acquisition.forms
 
 import flow.common.CSRFToken
+import flow.common.E2ETestUser
 import flow.common.IForm
 
 /**
@@ -14,15 +15,15 @@ class DeliveryAddressForm implements IForm {
     DeliveryAddressForm(CSRFToken token) {
         this.data = [
                 'CSRFToken'                  : token.value,
-                'deliveryAddress.apartment'  : 'Unit 1-4',
-                'deliveryAddress.building'   : 'Trident Place',
-                'deliveryAddress.companyname': 'E E Ltd',
-                'deliveryAddress.county'     : 'Hertfordshire',
-                'deliveryAddress.line1'      : 'Mosquito Way',
-                'deliveryAddress.postalCode' : 'AL10 9BW',
-                'deliveryAddress.town'       : 'HATFIELD',
+                'deliveryAddress.apartment'  : E2ETestUser.AcquisitionFlowUser.APARTMENT,
+                'deliveryAddress.building'   : E2ETestUser.AcquisitionFlowUser.BUILDING,
+                'deliveryAddress.companyname': E2ETestUser.AcquisitionFlowUser.COMPANY_NAME,
+                'deliveryAddress.county'     : E2ETestUser.AcquisitionFlowUser.COUNTY,
+                'deliveryAddress.line1'      : E2ETestUser.AcquisitionFlowUser.ADDRESS_LINE_ONE,
+                'deliveryAddress.postalCode' : E2ETestUser.AcquisitionFlowUser.POST_CODE,
+                'deliveryAddress.town'       : E2ETestUser.AcquisitionFlowUser.TOWN,
                 'deliveryAddressOption'      : false,
-                'deliveryAddressPostCode'    : 'AL10 9BW'
+                'deliveryAddressPostCode'    : E2ETestUser.AcquisitionFlowUser.POST_CODE
         ]
     }
 

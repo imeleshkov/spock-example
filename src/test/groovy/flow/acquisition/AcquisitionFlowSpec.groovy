@@ -22,6 +22,7 @@ import flow.acquisition.pages.PersonalDetailsPage
 import flow.acquisition.pages.TccHostedPage
 import flow.acquisition.pages.TermsAndConditionsPage
 import flow.acquisition.pages.ThreeDSHostingPage
+import flow.common.BaseTest
 import flow.common.BasketTestData
 import flow.common.Browser
 import flow.common.CarouselItem
@@ -37,17 +38,16 @@ import flow.common.PaymentDetailsForm
 import flow.common.PaymentFrame
 import flow.common.PhoneDetailsPage
 import flow.common.ServicePlanCarousel
+import flow.common.TestConfigFactory
 import flow.common.WebSecurePageSubmitFrame
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
-import spock.lang.Specification
 
 /**
  * Multi step test which covers "acquisition" scenario
  */
 @Category(EndToEndTest.class)
-//@Stepwise
-class AcquisitionFlowSpec extends Specification {
+class AcquisitionFlowSpec extends BaseTest {
 
     @Shared
     Browser browser = new Browser()
@@ -62,7 +62,6 @@ class AcquisitionFlowSpec extends Specification {
             .build()
 
     def 'An anonymous user starts at Home page'() {
-
         when: 'A user opens a Home page'
         HomePage homePage = browser.open(HomePage.class, false)
         CommonNavigationComponent navBar = homePage.getNavigationBar()
@@ -229,7 +228,7 @@ class AcquisitionFlowSpec extends Specification {
         responseJson.success == 'true'
     }
 
-    def 'user goes to secure payment page'() {
+    def 'user goes to secure payment page and then to confirmation page'() {
         when: 'secure page loads'
         browser.open(ThreeDSHostingPage.class, false)
         AcquisitionSecurePageFrame securePageFrame = browser.open(AcquisitionSecurePageFrame.class, false)
@@ -274,9 +273,4 @@ class AcquisitionFlowSpec extends Specification {
         confirmationPage.getPayToday() == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.HANDSET_COST
         confirmationPage.getMonthlyCost() == E2ETestPhone.AcquisitionFlowPhone.ServicePlan.MONTHLY_COST
     }
-
-    def 'then user lands on Order confirmation page'() {
-
-    }
-
 }

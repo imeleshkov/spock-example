@@ -1,5 +1,6 @@
 package flow.upgrade
 
+import flow.common.BaseTest
 import flow.common.CarouselItem
 import flow.common.CleanActionForm
 
@@ -27,13 +28,12 @@ import flow.upgrade.pages.UpgradePersonalizedHomePage
 import flow.upgrade.pages.UpgradeWebSecurePage
 import org.junit.experimental.categories.Category
 import spock.lang.Shared
-import spock.lang.Specification
 
 /**
  * Multi step test which covers "Upgrade" scenario through Recommedations page
  */
 @Category(EndToEndTest.class)
-class UpgradeFlowSpec extends Specification {
+class UpgradeFlowSpec extends BaseTest {
 
     @Shared
     Browser browser = new Browser()

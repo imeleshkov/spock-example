@@ -7,9 +7,9 @@ import org.jsoup.nodes.Element
  */
 class Basket extends ElementWrapper {
 
-    private final static String UPGRADE_TITLE_SELECTOR = ".ee-upgrade-title"
-    private final static String UPGRADE_CAPACITY_SELECTOR = ".ee-upgrade-spec-capacity"
-    private final static String UPGRADE_COLOUR_SELECTOR = ".ee-upgrade-spec-colour"
+    private final static String PRODUCT_TITLE_SELECTOR = ".ee-upgrade-title"
+    private final static String PRODUCT_CAPACITY_SELECTOR = ".ee-upgrade-spec-capacity"
+    private final static String PRODUCT_COLOUR_SELECTOR = ".ee-upgrade-spec-colour"
     private final static String PAY_TODAY_SELECTOR = ".pay-today-total"
     private final static String MONTHLY_COST_SELECTOR = ".pay-monthly-total-value"
 
@@ -22,7 +22,7 @@ class Basket extends ElementWrapper {
      * @return
      */
     String getPhoneTitle() {
-        return element.select(UPGRADE_TITLE_SELECTOR).first().text()
+        return find(PRODUCT_TITLE_SELECTOR).text()
     }
 
     /**
@@ -30,8 +30,7 @@ class Basket extends ElementWrapper {
      * @return
      */
     String getPhoneCapacity() {
-        def capacityElem = element.select(UPGRADE_CAPACITY_SELECTOR).first()
-        return capacityElem.text()
+        return find(PRODUCT_CAPACITY_SELECTOR).text()
     }
 
     /**
@@ -39,8 +38,7 @@ class Basket extends ElementWrapper {
      * @return
      */
     String getPhoneColour() {
-        def colourElem = element.select(UPGRADE_COLOUR_SELECTOR).first()
-        return colourElem.text()
+        return find(PRODUCT_COLOUR_SELECTOR).text()
     }
 
     /**
