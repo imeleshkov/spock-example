@@ -1,6 +1,5 @@
 package flow.acquisition.pages
 
-import flow.common.E2ETestUser
 import flow.common.Money
 import flow.common.MoneyBuilder
 import flow.common.OrderConfirmationPage
@@ -44,7 +43,9 @@ class AcquisitionOrderConfirmationPage extends OrderConfirmationPage {
      * @return
      */
     String getNewPlan() {
-        return element.select(".prod-info > div > ul").first().text()
+        return element.select(".prod-info")
+                .select(".eeg-product-entitlements")
+                .first()?.text()
     }
 
     /**
